@@ -8,28 +8,71 @@ class PaymentsHttpClientV1 extends pip_services3_rpc_node_1.CommandableHttpClien
         if (config != null)
             this.configure(pip_services3_commons_node_1.ConfigParams.fromValue(config));
     }
-    makeCreditPayment(correlationId, platformId, methodId, order, callback) {
-        this.callCommand('make_credit_payment', correlationId, {
-            platform_id: platformId,
-            method_id: methodId,
-            order: order
+    makePayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, callback) {
+        this.callCommand('make_payment', correlationId, {
+            system: system,
+            account: account,
+            buyer: buyer,
+            order: order,
+            payment_method: paymentMethod,
+            amount: amount,
+            currency_code: currencyCode
         }, callback);
     }
-    confirmCreditPayment(correlationId, paymentId, callback) {
-        this.callCommand('confirm_credit_payment', correlationId, {
-            payment_id: paymentId
+    submitPayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, callback) {
+        this.callCommand('submit_payment', correlationId, {
+            system: system,
+            account: account,
+            buyer: buyer,
+            order: order,
+            payment_method: paymentMethod,
+            amount: amount,
+            currency_code: currencyCode
         }, callback);
     }
-    makeDebitPayment(correlationId, platformId, transactionId, destinationAccount, callback) {
-        this.callCommand('make_debit_payment', correlationId, {
-            platform_id: platformId,
-            transaction_id: transactionId,
-            destination_account: destinationAccount
+    authorizePayment(correlationId, system, account, payment, callback) {
+        this.callCommand('authorize_payment', correlationId, {
+            system: system,
+            account: account,
+            payment: payment
         }, callback);
     }
-    cancelPayment(correlationId, paymentId, callback) {
-        this.callCommand('cancel_payment', correlationId, {
-            payment_id: paymentId
+    checkPayment(correlationId, system, account, payment, callback) {
+        this.callCommand('check_payment', correlationId, {
+            system: system,
+            account: account,
+            payment: payment
+        }, callback);
+    }
+    refundPayment(correlationId, system, account, payment, callback) {
+        this.callCommand('refund_payment', correlationId, {
+            system: system,
+            account: account,
+            payment: payment
+        }, callback);
+    }
+    makePayout(correlationId, system, account, seller, description, amount, currencyCode, callback) {
+        this.callCommand('make_payout', correlationId, {
+            system: system,
+            account: account,
+            seller: seller,
+            description: description,
+            amount: amount,
+            currency_code: currencyCode
+        }, callback);
+    }
+    checkPayout(correlationId, system, account, payout, callback) {
+        this.callCommand('check_payout', correlationId, {
+            system: system,
+            account: account,
+            payout: payout
+        }, callback);
+    }
+    cancelPayout(correlationId, system, account, payout, callback) {
+        this.callCommand('cancel_payout', correlationId, {
+            system: system,
+            account: account,
+            payout: payout
         }, callback);
     }
 }

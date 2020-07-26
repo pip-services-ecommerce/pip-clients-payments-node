@@ -1,9 +1,14 @@
 import { ConfigParams } from 'pip-services3-commons-node';
 import { CommandableHttpClient } from 'pip-services3-rpc-node';
 
-import { PaymentV1 } from './PaymentV1';
 import { IPaymentsClientV1 } from './IPaymentsClientV1';
-import { OrderV1 } from './OrderV1';
+import { PaymentSystemAccountV1 } from 'pip-services-payments-node';
+import { BuyerV1 } from 'pip-services-payments-node';
+import { OrderV1 } from 'pip-services-payments-node';
+import { PaymentMethodV1 } from 'pip-services-payments-node';
+import { PaymentV1 } from 'pip-services-payments-node';
+import { SellerV1 } from 'pip-services-payments-node';
+import { PayoutV1 } from 'pip-services-payments-node';
 
 export class PaymentsHttpClientV1 extends CommandableHttpClient implements IPaymentsClientV1 {
 
@@ -14,49 +19,132 @@ export class PaymentsHttpClientV1 extends CommandableHttpClient implements IPaym
             this.configure(ConfigParams.fromValue(config));
     }
 
-    makeCreditPayment(correlationId: string, platformId: string, methodId: string, order: OrderV1, callback: (err: any, payment: PaymentV1) => void): void {
+    makePayment(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        buyer: BuyerV1, order: OrderV1, paymentMethod: PaymentMethodV1, amount: number, currencyCode: string,
+        callback: (err: any, payment: PaymentV1) => void): void {
         this.callCommand(
-            'make_credit_payment',
+            'make_payment',
             correlationId,
             {
-                platform_id: platformId,
-                method_id: methodId,
-                order: order
+                system: system,
+                account: account,
+                buyer: buyer,
+                order: order,
+                payment_method: paymentMethod,
+                amount: amount,
+                currency_code: currencyCode
             },
             callback
         );
     }
 
-    confirmCreditPayment(correlationId: string, paymentId: string, callback: (err: any, payment: PaymentV1) => void): void {
+    submitPayment(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        buyer: BuyerV1, order: OrderV1, paymentMethod: PaymentMethodV1, amount: number, currencyCode: string,
+        callback: (err: any, payment: PaymentV1) => void): void {
         this.callCommand(
-            'confirm_credit_payment',
+            'submit_payment',
             correlationId,
             {
-                payment_id: paymentId
+                system: system,
+                account: account,
+                buyer: buyer,
+                order: order,
+                payment_method: paymentMethod,
+                amount: amount,
+                currency_code: currencyCode
             },
             callback
         );
     }
 
-    makeDebitPayment(correlationId: string, platformId: string, transactionId: string, destinationAccount: string, callback: (err: any, payment: PaymentV1) => void): void {
+    authorizePayment(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        payment: PaymentV1,
+        callback: (err: any, payment: PaymentV1) => void): void {
         this.callCommand(
-            'make_debit_payment',
+            'authorize_payment',
             correlationId,
             {
-                platform_id: platformId,
-                transaction_id: transactionId,
-                destination_account: destinationAccount
+                system: system,
+                account: account,
+                payment: payment
             },
             callback
         );
     }
 
-    cancelPayment(correlationId: string, paymentId: string, callback: (err: any, payment: PaymentV1) => void): void {
+    checkPayment(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        payment: PaymentV1,
+        callback: (err: any, payment: PaymentV1) => void): void {
         this.callCommand(
-            'cancel_payment',
+            'check_payment',
             correlationId,
             {
-                payment_id: paymentId
+                system: system,
+                account: account,
+                payment: payment
+            },
+            callback
+        );
+    }
+
+    refundPayment(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        payment: PaymentV1,
+        callback: (err: any, payment: PaymentV1) => void): void {
+        this.callCommand(
+            'refund_payment',
+            correlationId,
+            {
+                system: system,
+                account: account,
+                payment: payment
+            },
+            callback
+        );
+    }
+
+    makePayout(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        seller: SellerV1, description: string, amount: number, currencyCode: string,
+        callback: (err: any, payout: PayoutV1) => void): void {
+        this.callCommand(
+            'make_payout',
+            correlationId,
+            {
+                system: system,
+                account: account,
+                seller: seller,
+                description: description,
+                amount: amount,
+                currency_code: currencyCode
+            },
+            callback
+        );
+    }
+
+    checkPayout(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        payout: PayoutV1,
+        callback: (err: any, payout: PayoutV1) => void): void {
+        this.callCommand(
+            'check_payout',
+            correlationId,
+            {
+                system: system,
+                account: account,
+                payout: payout
+            },
+            callback
+        );
+    }
+
+    cancelPayout(correlationId: string, system: string, account: PaymentSystemAccountV1,
+        payout: PayoutV1,
+        callback: (err: any, payout: PayoutV1) => void): void {
+        this.callCommand(
+            'cancel_payout',
+            correlationId,
+            {
+                system: system,
+                account: account,
+                payout: payout
             },
             callback
         );

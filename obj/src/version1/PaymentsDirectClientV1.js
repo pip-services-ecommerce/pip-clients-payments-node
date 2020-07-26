@@ -10,32 +10,60 @@ class PaymentsDirectClientV1 extends pip_services3_rpc_node_1.DirectClient {
         if (config)
             this.configure(pip_services3_commons_node_1.ConfigParams.fromValue(config));
     }
-    makeCreditPayment(correlationId, platformId, methodId, order, callback) {
-        let timing = this.instrument(correlationId, 'payments.make_credit_payment');
-        this._controller.makeCreditPayment(correlationId, platformId, methodId, order, (err, payment) => {
+    makePayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, callback) {
+        let timing = this.instrument(correlationId, 'payments.make_payment');
+        this._controller.makePayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, (err, payment) => {
             timing.endTiming();
             callback(err, payment);
         });
     }
-    confirmCreditPayment(correlationId, paymentId, callback) {
-        let timing = this.instrument(correlationId, 'payments.confirm_credit_payment');
-        this._controller.confirmCreditPayment(correlationId, paymentId, (err, payment) => {
+    submitPayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, callback) {
+        let timing = this.instrument(correlationId, 'payments.submit_payment');
+        this._controller.submitPayment(correlationId, system, account, buyer, order, paymentMethod, amount, currencyCode, (err, payment) => {
             timing.endTiming();
             callback(err, payment);
         });
     }
-    makeDebitPayment(correlationId, platformId, transactionId, destinationAccount, callback) {
-        let timing = this.instrument(correlationId, 'payments.make_debit_payment');
-        this._controller.makeDebitPayment(correlationId, platformId, transactionId, destinationAccount, (err, payment) => {
+    authorizePayment(correlationId, system, account, payment, callback) {
+        let timing = this.instrument(correlationId, 'payments.authorize_payment');
+        this._controller.authorizePayment(correlationId, system, account, payment, (err, payment) => {
             timing.endTiming();
             callback(err, payment);
         });
     }
-    cancelPayment(correlationId, paymentId, callback) {
-        let timing = this.instrument(correlationId, 'payments.cancel_payment');
-        this._controller.cancelPayment(correlationId, paymentId, (err, payment) => {
+    checkPayment(correlationId, system, account, payment, callback) {
+        let timing = this.instrument(correlationId, 'payments.check_payment');
+        this._controller.checkPayment(correlationId, system, account, payment, (err, payment) => {
             timing.endTiming();
             callback(err, payment);
+        });
+    }
+    refundPayment(correlationId, system, account, payment, callback) {
+        let timing = this.instrument(correlationId, 'payments.refund_payment');
+        this._controller.refundPayment(correlationId, system, account, payment, (err, payment) => {
+            timing.endTiming();
+            callback(err, payment);
+        });
+    }
+    makePayout(correlationId, system, account, seller, description, amount, currencyCode, callback) {
+        let timing = this.instrument(correlationId, 'payments.make_payout');
+        this._controller.makePayout(correlationId, system, account, seller, description, amount, currencyCode, (err, payout) => {
+            timing.endTiming();
+            callback(err, payout);
+        });
+    }
+    checkPayout(correlationId, system, account, payout, callback) {
+        let timing = this.instrument(correlationId, 'payments.check_payout');
+        this._controller.checkPayout(correlationId, system, account, payout, (err, payout) => {
+            timing.endTiming();
+            callback(err, payout);
+        });
+    }
+    cancelPayout(correlationId, system, account, payout, callback) {
+        let timing = this.instrument(correlationId, 'payments.cancel_payout');
+        this._controller.cancelPayout(correlationId, system, account, payout, (err, payout) => {
+            timing.endTiming();
+            callback(err, payout);
         });
     }
 }

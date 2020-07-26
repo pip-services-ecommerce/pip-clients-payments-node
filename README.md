@@ -74,7 +74,7 @@ client.open(null, function(err) {
 
 Now the client is ready to perform operations
 ```javascript
-// Make credit payment
+// Make payment
 var order = {
     id: '1',
     currency_code: 'USD',
@@ -99,33 +99,45 @@ var order = {
     ]
 };
 
-client.makeCreditPayment(
+client.makePayment(
     null,
     'stripe',
-    'md-0907172',
+    {   // account
+        access_key: STRIPE_ACCESS_KEY
+    },
+    {   // buyer
+        id: '2',
+        name: 'Steve Jobs',
+    },
     order,
-    function (err, payment) {
-        if (payment.status == 'unconfirmed') {
-            client.confirmCreditPayment(null, payment.id, function (err, payment) {
-                 if (payment.status == 'confirmed') {
-                     // ... payment processed successfully
-                 }
-            });
+    {   // payment method
+        id: PAYMENT_METHOD_ID,
+        type: 'card'
+    },
+    order.total,
+    order.currency_code,
+    function(err, payment) => {
+        if (payment.status == PaymentStatusV1.Confirmed) {
+        // ... payment processed successfully
         }
     }
 );
 ```
 
 ```javascript
-// Cancel confirmed payment
-client.cancelPayment(
+// Refund confirmed payment
+client.refundPayment(
     null,
+    'stripe',
+    {   // account
+        access_key: STRIPE_ACCESS_KEY
+    },
     payment.id,
     function(err, payment) {
-        if (payment.status == 'canceled') {
-        // ... payment canceled successfully
+        if (payment.status == PaymentStatusV1.Canceled) {
+        // ... payment refunded successfully
         }
-    ...    
+        ...    
 });
 ```    
 
