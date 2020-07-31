@@ -2,6 +2,7 @@ export { IPaymentsClientV1 } from './IPaymentsClientV1';
 export { PaymentsHttpClientV1 } from './PaymentsHttpClientV1';
 export { PaymentsDirectClientV1 } from './PaymentsDirectClientV1';
 export { PaymentsNullClientV1 } from './PaymentsNullClientV1';
+export { PaymentsMemoryClientV1 } from './PaymentsMemoryClientV1';
 export { AddressV1 } from './AddressV1';
 export { AddressV1Schema } from './AddressV1Schema';
 export { BankAccountV1 } from './BankAccountV1';

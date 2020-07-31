@@ -1,79 +1,79 @@
-import { Descriptor, ConfigParams } from 'pip-services3-commons-node';
-import { References } from 'pip-services3-commons-node';
-import { ConsoleLogger } from 'pip-services3-components-node';
+// import { Descriptor, ConfigParams } from 'pip-services3-commons-node';
+// import { References } from 'pip-services3-commons-node';
+// import { ConsoleLogger } from 'pip-services3-components-node';
 
-import { PaymentsController } from 'pip-services-payments-node';
-import { PaymentsDirectClientV1 } from '../../src/version1/PaymentsDirectClientV1';
-import { PaymentsClientFixtureV1 } from './PaymentsClientFixtureV1';
-import { StripeConnector } from 'pip-services-payments-node';
+// import { PaymentsController } from 'pip-services-payments-node';
+// import { PaymentsDirectClientV1 } from '../../src/version1/PaymentsDirectClientV1';
+// import { PaymentsClientFixtureV1 } from './PaymentsClientFixtureV1';
+// import { StripeConnector } from 'pip-services-payments-node';
 
-suite('PaymentsDirectClientV1', () => {
-    let client: PaymentsDirectClientV1;
-    let fixture: PaymentsClientFixtureV1;
-    let terminate: boolean = false;
+// suite('PaymentsDirectClientV1', () => {
+//     let client: PaymentsDirectClientV1;
+//     let fixture: PaymentsClientFixtureV1;
+//     let terminate: boolean = false;
 
-    suiteSetup((done) => {
-        var STRIPE_ACCESS_KEY = process.env["STRIPE_ACCESS_KEY"];
+//     suiteSetup((done) => {
+//         var STRIPE_ACCESS_KEY = process.env["STRIPE_ACCESS_KEY"];
 
-        if (!STRIPE_ACCESS_KEY) {
-            terminate = true;
-            done(null);
-            return;
-        }
+//         if (!STRIPE_ACCESS_KEY) {
+//             terminate = true;
+//             done(null);
+//             return;
+//         }
 
-        let logger = new ConsoleLogger();
+//         let logger = new ConsoleLogger();
 
-        let controller = new PaymentsController();
+//         let controller = new PaymentsController();
 
-        let stripeConnector = new StripeConnector();
-        stripeConnector.configure(ConfigParams.fromTuples(
-            'options.auto_confirm', false,
-            'credential.access_key', STRIPE_ACCESS_KEY
-        ));
+//         let stripeConnector = new StripeConnector();
+//         stripeConnector.configure(ConfigParams.fromTuples(
+//             'options.auto_confirm', false,
+//             'credential.access_key', STRIPE_ACCESS_KEY
+//         ));
 
-        let references: References = References.fromTuples(
-            new Descriptor('pip-services', 'logger', 'console', 'default', '1.0'), logger,
-            new Descriptor('pip-services-payments', 'controller', 'default', 'default', '1.0'), controller,
-            new Descriptor('pip-services-payments', 'connector', 'stripe', '*', '1.0'), stripeConnector
-        );
+//         let references: References = References.fromTuples(
+//             new Descriptor('pip-services', 'logger', 'console', 'default', '1.0'), logger,
+//             new Descriptor('pip-services-payments', 'controller', 'default', 'default', '1.0'), controller,
+//             new Descriptor('pip-services-payments', 'connector', 'stripe', '*', '1.0'), stripeConnector
+//         );
 
-        controller.setReferences(references);
+//         controller.setReferences(references);
 
-        client = new PaymentsDirectClientV1();
-        client.setReferences(references);
+//         client = new PaymentsDirectClientV1();
+//         client.setReferences(references);
 
-        fixture = new PaymentsClientFixtureV1(client);
+//         fixture = new PaymentsClientFixtureV1(client);
 
-        stripeConnector.open(null, (err) => {
-            client.open(null, done);
-        });
-    });
+//         stripeConnector.open(null, (err) => {
+//             client.open(null, done);
+//         });
+//     });
 
-    suiteTeardown((done) => {
-        if (terminate) {
-            done();
-            return;
-        }
+//     suiteTeardown((done) => {
+//         if (terminate) {
+//             done();
+//             return;
+//         }
 
-        client.close(null, done);
-    });
+//         client.close(null, done);
+//     });
 
-    test('[Stripe] Make payment', (done) => {
-        if (terminate) {
-            done();
-            return;
-        }
+//     test('[Stripe] Make payment', (done) => {
+//         if (terminate) {
+//             done();
+//             return;
+//         }
 
-        fixture.testStripeMakePayment(done);
-    });
+//         fixture.testStripeMakePayment(done);
+//     });
 
-    test('[Stripe] Make submit/authorize payment', (done) => {
-        if (terminate) {
-            done();
-            return;
-        }
+//     test('[Stripe] Make submit/authorize payment', (done) => {
+//         if (terminate) {
+//             done();
+//             return;
+//         }
 
-        fixture.testStripeSubmitAndAuthorizePayment(done);
-    });
+//         fixture.testStripeSubmitAndAuthorizePayment(done);
+//     });
 
-});
+// });
